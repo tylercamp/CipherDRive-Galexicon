@@ -1,0 +1,280 @@
+﻿<Window x:Class="GalexiconUX.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GalexiconUX"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
+        mc:Ignorable="d"
+        x:Name="Window"
+        Title="Galexicon" Height="827.749" Width="1297.721"
+        >
+    <Window.Resources>
+        <ContextMenu DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}" x:Name="DefaultCategoryContextMenu" x:Key="DefaultCategoryContextMenu">
+            <MenuItem Header="New Default" IsEnabled="False" />
+        </ContextMenu>
+        <ContextMenu DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}" x:Name="DefaultObjectContextMenu" x:Key="DefaultObjectContextMenu">
+            <MenuItem Header="Instantiate default" />
+            <MenuItem Header="Instantiate default in Frame" />
+            <MenuItem Header="Remove" IsEnabled="False" /> <!-- Would also need prompt to migrate existing references to -->
+        </ContextMenu>
+        <ContextMenu DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}" x:Name="ListContextMenu" x:Key="ListContextMenu">
+            
+            <MenuItem Header="Focus" Click="BodyMenu_SetFocusClick" />
+            <MenuItem Header="Focus parent" Click="BodyMenu_FocusParentClick" />
+            <MenuItem IsEnabled="False" Header="Revert to Default" Click="BodyMenu_RevertToDefault" />
+            <MenuItem Header="Add as Celestial" Click="AddListItemAsCelestial_Click" />
+            <!--<MenuItem Header="Add as Celestial" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=HasFocus}" />-->
+            <MenuItem Header="Delete" Click="BodyMenu_DeleteClick" />
+        </ContextMenu>
+        <ContextMenu DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}" x:Name="FrameContextMenu" x:Key="FrameContextMenu">
+            <MenuItem Header="New">
+                <MenuItem Header="Asteroid" Click="NewRelativeAsteroid_Click" />
+                <MenuItem Header="Belt" Click="NewRelativeBelt_Click" />
+                <MenuItem Header="Black hole" Click="NewRelativeBlackHole_Click" />
+                <MenuItem Header="Comet" Click="NewRelativeComet_Click" />
+                <MenuItem Header="Mega-structure" Click="NewRelativeMegaStructure_Click" />
+                <MenuItem Header="Moon" Click="NewRelativeMoon_Click" />
+                <MenuItem Header="Planet" Click="NewRelativePlanet_Click" />
+                <MenuItem Header="Settlement" Click="NewRelativeSettlement_Click" />
+                <MenuItem Header="Star" Click="NewRelativeStar_Click" />
+                <MenuItem Header="Warp gate" Click="NewRelativeWarpGate_Click" />
+            </MenuItem>
+
+
+            <MenuItem IsEnabled="False" Header="Revert to Default" Click="BodyMenu_RevertToDefault" />
+            <MenuItem Header="Focus" Click="BodyMenu_SetFocusClick" />
+            <MenuItem Header="Focus parent" Click="BodyMenu_FocusParentClick" />
+            <MenuItem Header="Delete..." Click="BodyMenu_DeleteClick" />
+        </ContextMenu>
+
+        <ContextMenu DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}" x:Name="CelestialContextMenu" x:Key="CelestialContextMenu">
+
+            <MenuItem Header="New">
+                <MenuItem Header="Asteroid" Click="NewRelativeAsteroid_Click" />
+                <MenuItem Header="Belt" Click="NewRelativeBelt_Click" />
+                <MenuItem Header="Black hole" Click="NewRelativeBlackHole_Click" />
+                <MenuItem Header="Comet" Click="NewRelativeComet_Click" />
+                <MenuItem Header="Mega-structure" Click="NewRelativeMegaStructure_Click" />
+                <MenuItem Header="Moon" Click="NewRelativeMoon_Click" />
+                <MenuItem Header="Planet" Click="NewRelativePlanet_Click" />
+                <MenuItem Header="Settlement" Click="NewRelativeSettlement_Click" />
+                <MenuItem Header="Star" Click="NewRelativeStar_Click" />
+                <MenuItem Header="Warp gate" Click="NewRelativeWarpGate_Click" />
+            </MenuItem>
+
+
+            <MenuItem Header="Edit body" Click="BodyMenu_EditBodyClick" />
+            <MenuItem IsEnabled="False" Header="Revert to Default" Click="BodyMenu_RevertToDefault" />
+            <MenuItem Header="Focus" Click="BodyMenu_SetFocusClick" />
+            <MenuItem Header="Focus parent" Click="BodyMenu_FocusParentClick" />
+            <MenuItem Header="Remove from parent" Click="BodyMenu_RemoveFromParent" />
+            <MenuItem Header="Delete..." Click="BodyMenu_DeleteClick" />
+        </ContextMenu>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="530*" />
+        </Grid.RowDefinitions>
+        <Menu IsMainMenu="True" Grid.Row="0" Margin="0,0,-0.334,0">
+            <MenuItem Header="File">
+                <MenuItem Header="New Galexicon" Click="NewGalexicon_Click" />
+                <MenuItem Header="Load Galexicon" Click="LoadGalexicon_Click" />
+                <MenuItem IsEnabled="False" Header="Export..." />
+                <MenuItem IsEnabled="{Binding HasDb}" Header="Reload Galexicon" Click="ReloadGalexicon_Click" />
+            </MenuItem>
+            <MenuItem Header="New" IsEnabled="{Binding HasDb}">
+                <MenuItem Header="Asteroid" Click="NewAsteroid_Click" />
+                <MenuItem Header="Belt" Click="NewBelt_Click" />
+                <MenuItem Header="Black Hole" Click="NewBlackHole_Click" />
+                <MenuItem Header="Comet" Click="NewComet_Click" />
+                <MenuItem Header="Mega-structure" Click="NewMegaStructure_Click" />
+                <MenuItem Header="Moon" Click="NewMoon_Click" />
+                <MenuItem Header="Planet" Click="NewPlanet_Click" />
+                <MenuItem Header="Star" Click="NewStar_Click" />
+                <MenuItem Header="Settlement" Click="NewSettlement_Click" />
+                <MenuItem Header="Warp Gate" Click="NewWarpGate_Click" />
+            </MenuItem>
+            <!--
+            <MenuItem Header="Edit" IsEnabled="{Binding HasDb}">
+            </MenuItem>
+            -->
+        </Menu>
+
+        <xcad:DockingManager Grid.Row="1">
+            <xcad:LayoutRoot>
+                <xcad:LayoutPanel Orientation="Horizontal">
+                    <xcad:LayoutPanel Orientation="Vertical">
+                        <xcad:LayoutAnchorablePane>
+                            <xcad:LayoutAnchorable Title="System Index" CanHide="False">
+                                <TreeView x:Name="NullHierarchyTree" />
+                            </xcad:LayoutAnchorable>
+                            <xcad:LayoutAnchorable Title="Focus Hierarchy" CanHide="False">
+                                <TreeView x:Name="HierarchyTree" />
+                            </xcad:LayoutAnchorable>
+                            <xcad:LayoutAnchorable Title="Search Bodies" CanHide="False">
+                                <Grid Margin="0,0,1.667,-0.333">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="33"/>
+                                        <RowDefinition Height="469*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0" Text="Filter" VerticalAlignment="Top" HorizontalAlignment="Left" Width="31" Margin="10,5,0,0" Height="16" />
+                                    <ComboBox x:Name="SearchBox" Grid.Row="0" Margin="46,5,10,0" Height="19" VerticalAlignment="Top" IsEditable="True">
+                                        <ComboBoxItem Content="Star" />
+                                        <ComboBoxItem Content="Planet" />
+                                        <ComboBoxItem Content="Belt" />
+                                        <ComboBoxItem Content="Black hole" />
+                                        <ComboBoxItem Content="Comet" />
+                                        <ComboBoxItem Content="Mega structure" />
+                                        <ComboBoxItem Content="Moon" />
+                                        <ComboBoxItem Content="Planet" />
+                                        <ComboBoxItem Content="Station" />
+                                        <ComboBoxItem Content="Warp gate" />
+                                        <ComboBoxItem Content="Orbital frame" />
+                                    </ComboBox>
+
+                                    <ListView Grid.Row="1" x:Name="FreeBodies" Margin="0,2,3,0.333" SelectionChanged="FreeBodies_SelectionChanged" GridViewColumnHeader.Click="FreeBodiesColumnHeader_Click">
+                                        <ListView.ItemContainerStyle>
+                                            <Style TargetType="ListViewItem">
+                                                <EventSetter Event="MouseDoubleClick" Handler="FreeBodies_MouseDoubleClick" />
+                                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                                                <Setter Property="ContextMenu" Value="{StaticResource ListContextMenu}" />
+
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Path=IsFocused}" Value="true">
+                                                        <Setter Property="Background" Value="LightGray" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
+                                        <ListView.View>
+                                            <GridView>
+                                                <GridViewColumn Header="Name" Width="100">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock HorizontalAlignment="Stretch" Text="{Binding DetailedName}" />
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+                                                <GridViewColumn Header="Type" Width="80">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock HorizontalAlignment="Stretch" Text="{Binding Type}"/>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+                                                <GridViewColumn Header="Detailed Type" Width="200">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock HorizontalAlignment="Stretch" Text="{Binding DetailedType}"/>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+                                </Grid>
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
+                        <xcad:LayoutPanel Orientation="Horizontal">
+                            <xcad:LayoutAnchorablePane>
+                                <xcad:LayoutAnchorable Title="Defaults" CanHide="False">
+                                    <TreeView x:Name="DefaultsView">
+                                        <!--<TreeViewItem ContextMenu="{StaticResource DefaultContextMenu}" Header="Asteroid" IsExpanded="True">
+                                            <TreeViewItem Header="Default" />
+                                        </TreeViewItem>
+                                        <TreeViewItem ContextMenu="{StaticResource DefaultContextMenu}" Header="Belt" IsExpanded="True">
+                                            <TreeViewItem Header="Default" />
+                                        </TreeViewItem>
+                                        <TreeViewItem ContextMenu="{StaticResource DefaultContextMenu}" Header="Black hole" IsExpanded="True">
+                                            <TreeViewItem Header="Default" />
+                                        </TreeViewItem>
+                                        <TreeViewItem ContextMenu="{StaticResource DefaultContextMenu}" Header="Comet" IsExpanded="True">
+                                            <TreeViewItem Header="Default" />
+                                        </TreeViewItem>
+                                        <TreeViewItem ContextMenu="{StaticResource DefaultContextMenu}" Header="Mega-structure" IsExpanded="True">
+                                            <TreeViewItem Header="Default" />
+                                        </TreeViewItem>
+                                        <TreeViewItem ContextMenu="{StaticResource DefaultContextMenu}" Header="Moon" IsExpanded="True">
+                                            <TreeViewItem Header="Default" />
+                                        </TreeViewItem>
+                                        <TreeViewItem ContextMenu="{StaticResource DefaultContextMenu}" Header="Planet" IsExpanded="True">
+                                            <TreeViewItem Header="Default" />
+                                        </TreeViewItem>
+                                        <TreeViewItem ContextMenu="{StaticResource DefaultContextMenu}" Header="Settlement" IsExpanded="True">
+                                            <TreeViewItem Header="Default" />
+                                        </TreeViewItem>
+                                        <TreeViewItem ContextMenu="{StaticResource DefaultContextMenu}" Header="Star" IsExpanded="True">
+                                            <TreeViewItem Header="Default" />
+                                        </TreeViewItem>
+                                        <TreeViewItem ContextMenu="{StaticResource DefaultContextMenu}" Header="Warp gate" IsExpanded="True">
+                                            <TreeViewItem Header="Default" />
+                                        </TreeViewItem>-->
+                                    </TreeView>
+                                </xcad:LayoutAnchorable>
+                            </xcad:LayoutAnchorablePane>
+                            <xcad:LayoutAnchorablePane>
+                                <xcad:LayoutAnchorable Title="Properties" CanHide="False">
+                                    <Grid x:Name="PropertyGridContainer" Grid.Column="4" Grid.Row="1">
+                                        <!--
+                <windows:PropertyGrid x:Name="BodyViewer" PropertyChanged="BodyViewer_PropertyChanged" DataContextChanged="BodyViewer_DataContextChanged" xmlns:windows="clr-namespace:SoftFluent.Windows;assembly=SoftFluent.Windows" />
+                -->
+                                        <xctk:PropertyGrid x:Name="BodyViewer" ShowSearchBox="False" ShowSortOptions="False" PropertyValueChanged="BodyViewer_PropertyValueChanged" Margin="0,0,1.333,1.333">
+                                            <xctk:PropertyGrid.EditorDefinitions>
+                                                <xctk:EditorTemplateDefinition TargetProperties="Notes">
+                                                    <xctk:EditorTemplateDefinition.EditingTemplate>
+                                                        <DataTemplate>
+                                                            <TextBox Text="{Binding Value}" Height="100" AcceptsReturn="True" />
+                                                        </DataTemplate>
+                                                    </xctk:EditorTemplateDefinition.EditingTemplate>
+                                                </xctk:EditorTemplateDefinition>
+                                            </xctk:PropertyGrid.EditorDefinitions>
+                                        </xctk:PropertyGrid>
+                                    </Grid>
+                                </xcad:LayoutAnchorable>
+                            </xcad:LayoutAnchorablePane>
+                        </xcad:LayoutPanel>
+                    </xcad:LayoutPanel>
+                    <xcad:LayoutAnchorablePane>
+                        <xcad:LayoutAnchorable Title="Frame Diagram" CanHide="False">
+                            <Grid Grid.Column="2"  Grid.Row="1" Margin="0.333,0,0.333,0.333">
+                                <ToolBarTray Margin="0,0,-0.333,0" Height="29" VerticalAlignment="Top">
+                                    <ToolBar>
+                                        <Button Content="Refresh" Click="RefreshFrame_Click" />
+                                        <Button Content="Focus Parent" Click="FocusParentFocus_Click" />
+                                        <ToggleButton x:Name="ShowLabelsButton" IsChecked="True" Content="Labels" Click="ShowLabelsButton_Clicked" />
+                                    </ToolBar>
+                                    <ToolBar>
+                                        <Menu>
+                                            <ComboBox x:Name="ViewMode" SelectionChanged="ViewMode_SelectionChanged">
+                                                <ComboBoxItem Content="To-Scale" IsSelected="True" />
+                                                <ComboBoxItem Content="To-Scale Model" />
+                                                <ComboBoxItem IsEnabled="False" Content="Model" />
+                                            </ComboBox>
+                                            <MenuItem Header="Generate">
+                                                <MenuItem IsEnabled="False" Header="For selected celestial" />
+                                                <MenuItem IsEnabled="False" Header="For current frame" />
+                                            </MenuItem>
+                                        </Menu>
+                                    </ToolBar>
+                                    <ToolBar>
+                                        <TextBlock x:Name="lblCurrentFrame" Text="Frame: None" TextAlignment="Center" Height="18" Width="Auto"/>
+                                        <TextBlock Width="20" />
+                                        <TextBlock x:Name="lblCurrentCelestial" Text="Celestial: None" TextAlignment="Center" Height="18" Width="Auto" />
+                                    </ToolBar>
+                                </ToolBarTray>
+                                <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Hidden" PanningMode="HorizontalOnly" Margin="0,34,-0.523,0.096">
+                                    <Canvas ClipToBounds="True" x:Name="FrameCanvas" Background="Black" />
+                                </ScrollViewer>
+                            </Grid>
+                        </xcad:LayoutAnchorable>
+                    </xcad:LayoutAnchorablePane>
+                </xcad:LayoutPanel>
+            </xcad:LayoutRoot>
+        </xcad:DockingManager>
+    </Grid>
+</Window>

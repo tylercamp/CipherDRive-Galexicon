@@ -1,0 +1,16 @@
+﻿<Application x:Class="GalexiconUX.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:GalexiconUX"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <BitmapImage x:Key="Star_TypeA" UriSource="Images/TypeA.png" />
+        <BitmapImage x:Key="Star_TypeB" UriSource="Images/TypeB.png" />
+        <BitmapImage x:Key="Star_TypeD" UriSource="Images/TypeD.png" />
+        <BitmapImage x:Key="Star_TypeF" UriSource="Images/TypeF.png" />
+        <BitmapImage x:Key="Star_TypeG" UriSource="Images/TypeG.png" />
+        <BitmapImage x:Key="Star_TypeK" UriSource="Images/TypeK.png" />
+        <BitmapImage x:Key="Star_TypeM" UriSource="Images/TypeM.png" />
+        <BitmapImage x:Key="Star_TypeO" UriSource="Images/TypeO.png" />
+    </Application.Resources>
+</Application>
